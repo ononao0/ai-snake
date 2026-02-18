@@ -1,6 +1,7 @@
 import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import SnakeGame from "./pages/SnakeGame";
+import SnakeEnglish from "./pages/SnakeEnglish";
 import CubeDemo from "./pages/CubeDemo";
 
 export default function App() {
@@ -12,6 +13,7 @@ export default function App() {
         </Link>
         <div className="flex gap-4">
           <Link to="/snake" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">Snake</Link>
+          <Link to="/snake-english" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">Snake English</Link>
           <Link to="/cube" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">3D Cube</Link>
         </div>
       </nav>
@@ -19,6 +21,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/snake" element={<SnakeGame />} />
+          <Route path="/snake-english" element={<SnakeEnglish />} />
           <Route path="/cube" element={<CubeDemo />} />
         </Routes>
       </main>

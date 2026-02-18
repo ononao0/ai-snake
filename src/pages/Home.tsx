@@ -7,6 +7,11 @@ const games = [
     description: "Classic snake game. Eat food and grow longer!",
   },
   {
+    path: "/snake-english",
+    title: "Snake English Word",
+    description: "Spell words by eating letters in order. Learn English while playing!",
+  },
+  {
     path: "/cube",
     title: "3D Cube Demo",
     description: "Interactive 3D cube with Three.js.",
