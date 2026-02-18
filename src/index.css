@@ -1,0 +1,6 @@
+@import "tailwindcss";
+
+.canvas-container {
+  width: 100%;
+  flex: 1;
+}
