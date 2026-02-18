@@ -2,6 +2,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import Home from "./pages/Home";
 import SnakeGame from "./pages/SnakeGame";
 import CubeDemo from "./pages/CubeDemo";
+import WordShooter from "./pages/WordShooter";
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
         <div className="flex gap-4">
           <Link to="/snake" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">Snake</Link>
           <Link to="/cube" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">3D Cube</Link>
+          <Link to="/word-shooter" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">Word Shooter</Link>
         </div>
       </nav>
       <main className="flex-1 flex">
@@ -20,6 +22,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/snake" element={<SnakeGame />} />
           <Route path="/cube" element={<CubeDemo />} />
+          <Route path="/word-shooter" element={<WordShooter />} />
         </Routes>
       </main>
     </div>

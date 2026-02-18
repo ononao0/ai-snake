@@ -11,6 +11,11 @@ const games = [
     title: "3D Cube Demo",
     description: "Interactive 3D cube with Three.js.",
   },
+  {
+    path: "/word-shooter",
+    title: "Word Shooter",
+    description: "Shoot falling letters to spell English words!",
+  },
 ];
 
 export default function Home() {
