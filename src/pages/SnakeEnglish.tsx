@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import puzzles from "../data/puzzles";
 
 const GRID = 25;
 const CELL = 24;
@@ -29,112 +30,39 @@ interface Particle {
   size: number;
 }
 
-const PUZZLES: { hint: string; answer: string }[] = [
-  // 3-letter words (1-20)
-  { hint: "Opposite of night", answer: "DAY" },
-  { hint: "A pet that barks", answer: "DOG" },
-  { hint: "Frozen water", answer: "ICE" },
-  { hint: "Opposite of cold", answer: "HOT" },
-  { hint: "Opposite of happy", answer: "SAD" },
-  { hint: "You write with this", answer: "PEN" },
-  { hint: "A pet that meows", answer: "CAT" },
-  { hint: "Comes from a hen", answer: "EGG" },
-  { hint: "Opposite of new", answer: "OLD" },
-  { hint: "Color of the sky", answer: "RED" },
-  { hint: "A male child", answer: "BOY" },
-  { hint: "Insects make this", answer: "BUG" },
-  { hint: "A floor covering", answer: "RUG" },
-  { hint: "You sleep in this", answer: "BED" },
-  { hint: "Opposite of wet", answer: "DRY" },
-  { hint: "You use this to cut", answer: "SAW" },
-  { hint: "A body of water", answer: "SEA" },
-  { hint: "Not cold, not hot", answer: "MIX" },
-  { hint: "Vehicle on rails", answer: "VAN" },
-  { hint: "Sticky insect trap", answer: "WEB" },
-  // 4-letter words (21-50)
-  { hint: "A red fruit", answer: "APPLE" },
-  { hint: "You see with these", answer: "EYES" },
-  { hint: "King of the jungle", answer: "LION" },
-  { hint: "You read this", answer: "BOOK" },
-  { hint: "Opposite of slow", answer: "FAST" },
-  { hint: "Water from the sky", answer: "RAIN" },
-  { hint: "It shines at night", answer: "MOON" },
-  { hint: "It tells time", answer: "CLOCK" },
-  { hint: "A baby dog", answer: "PUPS" },
-  { hint: "Twinkles in the sky", answer: "STAR" },
-  { hint: "You kick this in soccer", answer: "BALL" },
-  { hint: "It grows on your head", answer: "HAIR" },
-  { hint: "Opposite of love", answer: "HATE" },
-  { hint: "A sweet dessert", answer: "CAKE" },
-  { hint: "You open it to enter", answer: "DOOR" },
-  { hint: "A green amphibian", answer: "FROG" },
-  { hint: "Carries your books", answer: "BAGS" },
-  { hint: "A large gray animal", answer: "BEAR" },
-  { hint: "It falls in winter", answer: "SNOW" },
-  { hint: "You sit on this", answer: "SEAT" },
-  { hint: "Opposite of tall", answer: "TINY" },
-  { hint: "Worn on the foot", answer: "SHOE" },
-  { hint: "You eat soup with this", answer: "BOWL" },
-  { hint: "A flying toy", answer: "KITE" },
-  { hint: "It protects from rain", answer: "COAT" },
-  { hint: "Sound a bell makes", answer: "RING" },
-  { hint: "Opposite of hard", answer: "SOFT" },
-  { hint: "Land surrounded by water", answer: "ISLE" },
-  { hint: "A farm animal that oinks", answer: "PIGS" },
-  { hint: "You drink from this", answer: "CUPS" },
-  // 5-letter words (51-75)
-  { hint: "Planet we live on", answer: "EARTH" },
-  { hint: "A large body of water", answer: "OCEAN" },
-  { hint: "Opposite of dark", answer: "LIGHT" },
-  { hint: "Season after winter", answer: "SPRING" },
-  { hint: "You wear it on your wrist", answer: "WATCH" },
-  { hint: "A place to swim", answer: "BEACH" },
-  { hint: "Opposite of below", answer: "ABOVE" },
-  { hint: "A musical instrument with keys", answer: "PIANO" },
-  { hint: "You sleep here at night", answer: "DREAM" },
-  { hint: "Round and red, a vegetable", answer: "ONION" },
-  { hint: "A tall plant", answer: "PLANT" },
-  { hint: "It powers electronics", answer: "POWER" },
-  { hint: "A quick meal", answer: "SNACK" },
-  { hint: "A piece of furniture for books", answer: "SHELF" },
-  { hint: "It orbits the Earth", answer: "SPACE" },
-  { hint: "Keeps your house warm", answer: "STOVE" },
-  { hint: "A sound you hear in mountains", answer: "VOICE" },
-  { hint: "It blows through trees", answer: "STORM" },
-  { hint: "A game with a net", answer: "MATCH" },
-  { hint: "Needed to unlock a door", answer: "LATCH" },
-  { hint: "A precious stone", answer: "JEWEL" },
-  { hint: "Your brain does this", answer: "THINK" },
-  { hint: "A country in Europe with pizza", answer: "ITALY" },
-  { hint: "You put food on this", answer: "PLATE" },
-  { hint: "A baby horse", answer: "FILLY" },
-  // 5-6 letter words (76-100)
-  { hint: "A yellow fruit", answer: "BANANA" },
-  { hint: "A baby cat", answer: "KITTEN" },
-  { hint: "Where airplanes land", answer: "RUNWAY" },
-  { hint: "A tropical bird", answer: "PARROT" },
-  { hint: "A frozen treat on a stick", answer: "ICICLE" },
-  { hint: "Color of grass", answer: "GREENS" },
-  { hint: "Opposite of always", answer: "SELDOM" },
-  { hint: "Worn on your finger", answer: "SILVER" },
-  { hint: "Sound of laughter", answer: "GIGGLE" },
-  { hint: "A striped wild horse", answer: "ZEBRAS" },
-  { hint: "A hot drink from leaves", answer: "HERBAL" },
-  { hint: "Where books are kept", answer: "SHELVE" },
-  { hint: "You dig with this", answer: "SHOVEL" },
-  { hint: "A type of monkey", answer: "BABOON" },
-  { hint: "Tiny pieces of bread", answer: "CRUMBS" },
-  { hint: "A winter sport on ice", answer: "HOCKEY" },
-  { hint: "A colorful arc in the sky", answer: "PRISMS" },
-  { hint: "A device for calling people", answer: "MOBILE" },
-  { hint: "A place to see animals", answer: "SAFARI" },
-  { hint: "Opposite of danger", answer: "SAFETY" },
-  { hint: "Breakfast food from hens", answer: "OMELET" },
-  { hint: "It carries passengers on water", answer: "VESSEL" },
-  { hint: "A magic word", answer: "PLEASE" },
-  { hint: "A large spotted cat", answer: "JAGUAR" },
-  { hint: "Frozen rain", answer: "FREEZE" },
-];
+
+// Sound effects using Web Audio API
+const audioCtx = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+
+function playTone(freq: number, duration: number, type: OscillatorType = "square", volume = 0.15) {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + duration);
+}
+
+function playCorrectSound() {
+  playTone(523, 0.1, "square", 0.12);
+  setTimeout(() => playTone(659, 0.1, "square", 0.12), 60);
+}
+
+function playWrongSound() {
+  playTone(200, 0.3, "sawtooth", 0.1);
+  setTimeout(() => playTone(150, 0.3, "sawtooth", 0.1), 100);
+}
+
+function playWordCompleteSound() {
+  playTone(523, 0.12, "square", 0.1);
+  setTimeout(() => playTone(659, 0.12, "square", 0.1), 100);
+  setTimeout(() => playTone(784, 0.12, "square", 0.1), 200);
+  setTimeout(() => playTone(1047, 0.25, "square", 0.12), 300);
+}
 
 function randomLetter(exclude: string): string {
   const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -209,6 +137,7 @@ export default function SnakeEnglish() {
     score: 0,
     level: 1,
     eatenLetters: [] as string[],
+    bodyLetters: [] as string[],
     glowAlpha: 0,
     shakeFrames: 0,
     shakeOffsetX: 0,
@@ -223,6 +152,7 @@ export default function SnakeEnglish() {
       s.dir = "RIGHT";
       s.nextDir = "RIGHT";
       s.particles = [];
+      s.bodyLetters = [];
     }
     s.puzzleIndex = puzzleIdx;
     s.letterIndex = 0;
@@ -233,7 +163,7 @@ export default function SnakeEnglish() {
     s.phase = "playing";
     s.running = true;
 
-    const answer = PUZZLES[puzzleIdx].answer;
+    const answer = puzzles[puzzleIdx].answer;
     s.foods = spawnFoods(answer[0], s.snake);
 
     setLevel(lvl);
@@ -338,12 +268,13 @@ export default function SnakeEnglish() {
       const eatenFoodIdx = s.foods.findIndex((f) => f.pos.x === head.x && f.pos.y === head.y);
       if (eatenFoodIdx !== -1) {
         const food = s.foods[eatenFoodIdx];
-        const puzzle = PUZZLES[s.puzzleIndex];
+        const puzzle = puzzles[s.puzzleIndex];
 
         if (food.letter === puzzle.answer[s.letterIndex]) {
           // Correct letter
           s.letterIndex++;
           s.eatenLetters = [...s.eatenLetters, food.letter];
+          s.bodyLetters = [...s.bodyLetters, food.letter];
           s.score += 10;
           s.glowAlpha = 0.8;
           setScore(s.score);
@@ -355,6 +286,7 @@ export default function SnakeEnglish() {
 
           if (s.letterIndex >= puzzle.answer.length) {
             // Word complete - bonus score and confetti burst, then immediately next word
+            playWordCompleteSound();
             s.score += 50;
             setScore(s.score);
             for (let i = 0; i < 3; i++) {
@@ -364,7 +296,7 @@ export default function SnakeEnglish() {
             }
 
             const nextIdx = s.puzzleIndex + 1;
-            if (nextIdx >= PUZZLES.length) {
+            if (nextIdx >= puzzles.length) {
               s.phase = "victory";
               s.running = false;
               setPhase("victory");
@@ -374,10 +306,12 @@ export default function SnakeEnglish() {
             }
           } else {
             // Spawn new foods for next letter
+            playCorrectSound();
             s.foods = spawnFoods(puzzle.answer[s.letterIndex], s.snake);
           }
         } else {
           // Wrong letter - game over
+          playWrongSound();
           const px = head.x * CELL + CELL / 2;
           const py = head.y * CELL + CELL / 2;
           s.particles.push(...spawnParticles(px, py, ["#f44", "#f66", "#f00", "#c00"], 20));
@@ -408,31 +342,35 @@ export default function SnakeEnglish() {
       ctx.save();
       ctx.translate(s.shakeOffsetX, s.shakeOffsetY);
 
-      // Background
-      ctx.fillStyle = "#0a0a0a";
-      ctx.fillRect(0, 0, SIZE, SIZE);
-
-      // Grid lines (subtle)
-      ctx.strokeStyle = "#151515";
-      ctx.lineWidth = 0.5;
-      for (let i = 0; i <= GRID; i++) {
-        ctx.beginPath();
-        ctx.moveTo(i * CELL, 0);
-        ctx.lineTo(i * CELL, SIZE);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(0, i * CELL);
-        ctx.lineTo(SIZE, i * CELL);
-        ctx.stroke();
+      // Background - checkerboard pattern
+      for (let row = 0; row < GRID; row++) {
+        for (let col = 0; col < GRID; col++) {
+          ctx.fillStyle = (row + col) % 2 === 0 ? "#0e0e0e" : "#0a0a0a";
+          ctx.fillRect(col * CELL, row * CELL, CELL, CELL);
+        }
       }
 
-      // Snake body with gradient
+      // Snake body with gradient + letters
       for (let i = s.snake.length - 1; i >= 0; i--) {
         const p = s.snake[i];
         const ratio = 1 - i / Math.max(s.snake.length, 1);
         const g = Math.floor(100 + ratio * 155);
         ctx.fillStyle = `rgb(30, ${g}, 30)`;
         ctx.fillRect(p.x * CELL + 1, p.y * CELL + 1, CELL - 2, CELL - 2);
+
+        // Draw letter on body segment (index 0 = head has most recent letter)
+        const letterIdx = s.bodyLetters.length - 1 - i;
+        if (letterIdx >= 0 && letterIdx < s.bodyLetters.length) {
+          ctx.fillStyle = `rgba(255, 255, 255, ${0.4 + ratio * 0.5})`;
+          ctx.font = `bold ${CELL - 8}px monospace`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(
+            s.bodyLetters[letterIdx],
+            p.x * CELL + CELL / 2,
+            p.y * CELL + CELL / 2 + 1
+          );
+        }
       }
 
       // Glow effect on head
@@ -489,7 +427,7 @@ export default function SnakeEnglish() {
         ctx.fillText("Congratulations!", SIZE / 2, SIZE / 2 - 20);
         ctx.font = "20px sans-serif";
         ctx.fillStyle = "#fff";
-        ctx.fillText(`All ${PUZZLES.length} words complete!`, SIZE / 2, SIZE / 2 + 15);
+        ctx.fillText(`All ${puzzles.length} words complete!`, SIZE / 2, SIZE / 2 + 15);
         ctx.fillText(`Final Score: ${s.score}`, SIZE / 2, SIZE / 2 + 45);
       }
 
@@ -511,13 +449,13 @@ export default function SnakeEnglish() {
     return () => clearTimeout(timerId);
   }, [initPuzzle]);
 
-  const puzzle = PUZZLES[stateRef.current.puzzleIndex];
+  const puzzle = puzzles[stateRef.current.puzzleIndex];
 
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-6">
       {/* Hint */}
       <div className="mb-2 text-lg font-semibold text-yellow-400">
-        Hint: {puzzle?.hint}
+        Hint: {puzzle?.question}
       </div>
 
       {/* Letter progress */}
