@@ -4,6 +4,7 @@ import SnakeGame from "./pages/SnakeGame";
 import SnakeEnglish from "./pages/SnakeEnglish";
 import CubeDemo from "./pages/CubeDemo";
 import WordShooter from "./pages/WordShooter";
+import Admin from "./pages/Admin";
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Link to="/snake-english" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">Snake English</Link>
           <Link to="/cube" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">3D Cube</Link>
           <Link to="/word-shooter" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">Word Shooter</Link>
+          <Link to="/admin" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">Word List</Link>
         </div>
       </nav>
       <main className="flex-1 flex">
@@ -26,6 +28,7 @@ export default function App() {
           <Route path="/snake-english" element={<SnakeEnglish />} />
           <Route path="/cube" element={<CubeDemo />} />
           <Route path="/word-shooter" element={<WordShooter />} />
+          <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>
     </div>
