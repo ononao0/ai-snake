@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import puzzles from "../data/puzzles";
+import GameController from "../components/GameController";
 
 const GRID = 25;
 const CELL = 24;
@@ -452,18 +453,18 @@ export default function SnakeEnglish() {
   const puzzle = puzzles[stateRef.current.puzzleIndex];
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6">
+    <div className="flex-1 flex flex-col items-center justify-center p-4">
       {/* Hint */}
-      <div className="mb-2 text-lg font-semibold text-yellow-400">
+      <div className="mb-2 text-base sm:text-lg font-semibold text-yellow-400 text-center px-2">
         Hint: {puzzle?.question}
       </div>
 
       {/* Letter progress */}
-      <div className="mb-3 flex gap-1.5">
+      <div className="mb-3 flex flex-wrap justify-center gap-1">
         {puzzle?.answer.split("").map((_ch, i) => (
           <span
             key={i}
-            className={`w-8 h-8 flex items-center justify-center rounded text-lg font-bold transition-all duration-200 ${
+            className={`w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded text-sm sm:text-lg font-bold transition-all duration-200 ${
               i < eatenLetters.length
                 ? "bg-green-600 text-white scale-110"
                 : "bg-gray-700 text-gray-500"
@@ -475,7 +476,7 @@ export default function SnakeEnglish() {
       </div>
 
       {/* Score / Level / Restart */}
-      <div className="mb-3 flex gap-6 items-center">
+      <div className="mb-3 flex flex-wrap justify-center gap-x-6 gap-y-2 items-center">
         <span className="text-sm text-gray-400">Score: {score}</span>
         <span className="text-sm text-gray-400">Level: {level}</span>
         {(phase === "gameOver" || phase === "victory") && (
@@ -493,12 +494,10 @@ export default function SnakeEnglish() {
         ref={canvasRef}
         width={SIZE}
         height={SIZE}
-        className="border border-[#333] rounded"
+        className="max-w-full h-auto block border border-[#333] rounded"
       />
 
-      <p className="mt-3 text-gray-500 text-sm">
-        Arrow keys or WASD to move. Eat the correct letter to spell the word!
-      </p>
+      <GameController variant="dpad" />
     </div>
   );
 }

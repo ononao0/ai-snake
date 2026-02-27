@@ -8,11 +8,11 @@ import WordShooter from "./pages/WordShooter";
 export default function App() {
   return (
     <div className="min-h-screen flex flex-col bg-[#0a0a0a] text-gray-200">
-      <nav className="flex items-center gap-6 px-6 py-3 bg-[#111] border-b border-[#222]">
+      <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 px-4 py-3 bg-[#111] border-b border-[#222]">
         <Link to="/" className="text-lg font-bold text-white no-underline">
           Game Collection
         </Link>
-        <div className="flex gap-4">
+        <div className="flex flex-wrap gap-4">
           <Link to="/snake" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">Snake</Link>
           <Link to="/snake-english" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">Snake English</Link>
           <Link to="/cube" className="text-sm text-gray-500 no-underline hover:text-white transition-colors">3D Cube</Link>

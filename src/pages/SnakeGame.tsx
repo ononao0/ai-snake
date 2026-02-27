@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import GameController from "../components/GameController";
 
 const GRID = 20;
 const CELL = 20;
@@ -105,7 +106,7 @@ export default function SnakeGame() {
   }, []);
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6">
+    <div className="flex-1 flex flex-col items-center justify-center p-4">
       <div className="mb-4 flex gap-6 items-center">
         <span className="text-lg">Score: {score}</span>
         {gameOver && (
@@ -121,11 +122,9 @@ export default function SnakeGame() {
         ref={canvasRef}
         width={SIZE}
         height={SIZE}
-        className="border border-[#333] rounded"
+        className="max-w-full h-auto block border border-[#333] rounded"
       />
-      <p className="mt-3 text-gray-500 text-sm">
-        Arrow keys or WASD to move
-      </p>
+      <GameController variant="dpad" />
     </div>
   );
 }

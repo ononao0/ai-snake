@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import questions, { Question } from "./wordShooterQuestions";
+import GameController from "../components/GameController";
 
 // --- Constants ---
 const CANVAS_W = 600;
@@ -639,8 +640,8 @@ export default function WordShooter() {
   }, [gameLoop]);
 
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-6">
-      <div className="mb-4 flex gap-6 items-center">
+    <div className="flex-1 flex flex-col items-center justify-center p-4">
+      <div className="mb-4 flex flex-wrap justify-center gap-x-4 gap-y-2 items-center">
         <span className="text-sm text-gray-500">
           Q{uiQuestionNum}/{shuffledQuestionsRef.current.length}
         </span>
@@ -666,11 +667,9 @@ export default function WordShooter() {
         ref={canvasRef}
         width={CANVAS_W}
         height={CANVAS_H}
-        className="border border-[#333] rounded"
+        className="max-w-full h-auto block border border-[#333] rounded"
       />
-      <p className="mt-3 text-gray-500 text-sm">
-        ← → to move, Space to shoot. Shoot the correct letters to spell the answer!
-      </p>
+      <GameController variant="shooter" />
     </div>
   );
 }
